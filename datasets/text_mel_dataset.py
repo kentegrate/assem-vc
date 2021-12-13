@@ -102,8 +102,11 @@ class TextMelDataset(Dataset):
 
     def get_mel_and_f0(self, audiopath, f0_mean=None, f0_var=None):
         wav, sr = librosa.load(audiopath, sr=None, mono=True)
-        assert sr == self.hp.audio.sampling_rate, \
-            'sample mismatch: expected %d, got %d at %s' % (self.hp.audio.sampling_rate, sr, audiopath)
+        if sr != self.hp.audio.sampling_rate:
+            wav = librosa.resample(wav, sr, self.hp.audio.sampling_rate)
+            sr = self.hp.audio.sampling_rate
+        #assert sr == self.hp.audio.sampling_rate, \
+            print('sample mismatch: expected %d, got %d at %s. Converted for you.' % (self.hp.audio.sampling_rate, sr, audiopath))
         wav = torch.from_numpy(wav)
         wav = wav.unsqueeze(0)
 
