@@ -20,8 +20,8 @@ class Cotatron(pl.LightningModule):
     def __init__(self, hparams):
         super().__init__()
         self.hparams = hparams  # used for pl
-        hp_global = OmegaConf.load(hparams.config[0])
-        hp_cota = OmegaConf.load(hparams.config[1])
+        hp_global = OmegaConf.load('config/global/config.yaml')
+        hp_cota = OmegaConf.load('config/cota/config.yaml')
         hp = OmegaConf.merge(hp_global, hp_cota)
         self.hp = hp
 
